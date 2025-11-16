@@ -45,9 +45,7 @@ interface InterviewInterfaceProps {
 const QUESTIONS: Question[] = [
   { id: 1, type: 'voice', text: 'Tell me about yourself and your background in software development.' },
   { id: 2, type: 'voice', text: 'What are your key strengths as a developer?' },
-  { id: 3, type: 'voice', text: 'Why are you interested in this position?' },
-  { id: 4, type: 'code', text: 'Write a Python function that reverses a string. The function should take a string as input and return the reversed string.' },
-  { id: 5, type: 'code', text: 'Write a Python function that finds all duplicate elements in a list and returns them as a new list.' },
+  { id: 3, type: 'code', text: 'Write a Python function that reverses a string. The function should take a string as input and return the reversed string.' },
 ];
 
 export default function InterviewInterface({ profileData, onExit }: InterviewInterfaceProps) {
@@ -70,7 +68,7 @@ export default function InterviewInterface({ profileData, onExit }: InterviewInt
       id: 'welcome',
       role: 'interviewer',
       type: 'text',
-      content: 'Welcome to your interview session! I\'ll be asking you a series of questions. The first three will be voice-based, followed by coding challenges. Let\'s begin!',
+      content: 'Welcome to your interview session! I\'ll be asking you 3 questions: 2 voice questions followed by 1 Python coding challenge. Let\'s begin!',
       timestamp: new Date(),
     };
 
@@ -276,7 +274,11 @@ export default function InterviewInterface({ profileData, onExit }: InterviewInt
         {currentQuestion <= totalQuestions && !completedQuestions.includes(currentQuestion) && (
           <>
             {currentQ.type === 'voice' ? (
-              <VoiceRecorder onSubmit={handleVoiceSubmit} isDisabled={isSubmitting} />
+              <VoiceRecorder 
+                onSubmit={handleVoiceSubmit} 
+                isDisabled={isSubmitting} 
+                questionText={currentQ.text}
+              />
             ) : (
               <CodeEditor onSubmit={handleCodeSubmit} isDisabled={isSubmitting} />
             )}
