@@ -3,10 +3,11 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { MessageSquare, Briefcase, Sparkles, FileText, TrendingUp, Menu, X, LogOut } from 'lucide-react';
+import { MessageSquare, Briefcase, Sparkles, FileText, TrendingUp, Menu, X, LogOut, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const modules = [
+  { id: 'profile', title: 'Profile', icon: User, href: '/dashboard/profile', color: 'from-[#3182CE] to-[#805AD5]' },
   { id: 'interview', title: 'Interview', icon: MessageSquare, href: '/dashboard/interview', color: 'from-[#D4A574] to-[#ED8936]' },
   { id: 'job-matching', title: 'Job Matching', icon: Briefcase, href: '/dashboard/job-matching', color: 'from-[#2C7A7B] to-[#3182CE]' },
   { id: 'enhancement', title: 'Enhancement', icon: Sparkles, href: '/dashboard/enhancement', color: 'from-[#38A169] to-[#48BB78]' },
