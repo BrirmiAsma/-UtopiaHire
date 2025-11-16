@@ -10,7 +10,7 @@ interface ProfileDataCollectorProps {
 
 export default function ProfileDataCollector({ onComplete, onCancel }: ProfileDataCollectorProps) {
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 6;
+  const totalSteps = 1;
 
   const [profileData, setProfileData] = useState<UserProfile>({
     name: '',
@@ -51,15 +51,7 @@ export default function ProfileDataCollector({ onComplete, onCancel }: ProfileDa
   const canProceed = () => {
     switch (currentStep) {
       case 1:
-        return profileData.name && profileData.mail && profileData.job;
-      case 2:
-      case 3:
-      case 4:
-        return true;
-      case 5:
-        return profileData.profile && profileData.language.length > 0;
-      case 6:
-        return true;
+        return profileData.job.trim() !== '';
       default:
         return false;
     }
@@ -187,63 +179,24 @@ export default function ProfileDataCollector({ onComplete, onCancel }: ProfileDa
             <div className="space-y-6 animate-fadeIn">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 bg-gradient-to-br from-[#3182CE] to-[#805AD5] rounded-lg flex items-center justify-center">
-                  <User className="w-6 h-6 text-white" />
+                  <Briefcase className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-[#2D3748]">Basic Information</h2>
-                  <p className="text-sm text-[#2D3748]/70">Tell us about yourself</p>
+                  <h2 className="text-2xl font-bold text-[#2D3748]">Job Description</h2>
+                  <p className="text-sm text-[#2D3748]/70">Enter the job description for the position</p>
                 </div>
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-[#2D3748] mb-2">
-                  Full Name <span className="text-red-500">*</span>
+                  Job Description <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="text"
-                  value={profileData.name}
-                  onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2C7A7B]"
-                  placeholder="John Doe"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-[#2D3748] mb-2">
-                  Email <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="email"
-                  value={profileData.mail}
-                  onChange={(e) => setProfileData({ ...profileData, mail: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2C7A7B]"
-                  placeholder="john@example.com"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-[#2D3748] mb-2">
-                  Phone
-                </label>
-                <input
-                  type="tel"
-                  value={profileData.phone}
-                  onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2C7A7B]"
-                  placeholder="+1234567890"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-[#2D3748] mb-2">
-                  Job Title <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
+                <textarea
                   value={profileData.job}
                   onChange={(e) => setProfileData({ ...profileData, job: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2C7A7B]"
-                  placeholder="Software Engineer"
+                  placeholder="Enter the job description here..."
+                  rows={10}
                 />
               </div>
             </div>
@@ -604,7 +557,7 @@ export default function ProfileDataCollector({ onComplete, onCancel }: ProfileDa
             onClick={handleNext}
             disabled={!canProceed()}
           >
-            {currentStep === totalSteps ? 'Start Interview' : 'Next'}
+            {currentStep === totalSteps ? 'Start' : 'Next'}
             {currentStep < totalSteps && <ChevronRight className="w-5 h-5 ml-2" />}
           </Button>
         </div>
