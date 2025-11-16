@@ -35,7 +35,7 @@ const modules = [
   },
   {
     id: 'cv-analyzer',
-    title: 'CV Analyzer',
+    title: 'CV Generator',
     description: 'Get detailed analysis of your CV with actionable recommendations for improvement.',
     icon: FileText,
     href: '/dashboard/cv-analyzer',
@@ -86,7 +86,7 @@ export default function DashboardPage() {
           <ul className="space-y-2 text-[#2D3748]/70">
             <li className="flex items-start gap-2">
               <span className="text-[#38A169] mt-1">✓</span>
-              <span>Start with the <strong>CV Analyzer</strong> to understand your current profile strength</span>
+              <span>Start with the <strong>CV Generator</strong> to understand your current profile strength</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-[#38A169] mt-1">✓</span>

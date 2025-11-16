@@ -58,6 +58,9 @@ export default function InterviewInterface({ profileData, onExit }: InterviewInt
   const [conversationHistory, setConversationHistory] = useState<ConversationMessage[]>([]);
   const [sessionId, setSessionId] = useState('');
   const [useAI, setUseAI] = useState(false);
+  const [overallScore, setOverallScore] = useState<number | null>(null);
+  const [improvementTips, setImprovementTips] = useState<string[]>([]);
+  const [isComplete, setIsComplete] = useState(false);
 
   const currentQ = QUESTIONS[currentQuestion - 1];
   const totalQuestions = QUESTIONS.length;
@@ -164,7 +167,7 @@ export default function InterviewInterface({ profileData, onExit }: InterviewInt
         id: (Date.now() + 1).toString(),
         role: 'interviewer',
         type: 'text',
-        content: '✓ Excellent solution! Your code is clean, efficient, and passes all test cases. Score: 10/10',
+        content: 'Excellent solution! Your code is clean, efficient, and passes all test cases. Score: 10/10',
         timestamp: new Date(),
       };
 
@@ -193,15 +196,16 @@ export default function InterviewInterface({ profileData, onExit }: InterviewInt
 
   const completeInterview = () => {
     setTimeout(() => {
-      const completionMessage: Message = {
-        id: 'complete',
-        role: 'interviewer',
-        type: 'text',
-        content: '🎉 Congratulations! You\'ve completed the interview. Your overall score is 85/100. Great job! You can now review your answers or exit the interview.',
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, completionMessage]);
+      // Static example score and improvement tips for now
+      setOverallScore(85);
+      setImprovementTips([
+        'Structure your answers using the STAR method (Situation, Task, Action, Result).',
+        'Include more concrete, measurable outcomes when describing your achievements.',
+        'Slow down your speaking pace slightly to sound more confident and clear.',
+      ]);
+
       setIsSubmitting(false);
+      setIsComplete(true);
     }, 1500);
   };
 
@@ -237,66 +241,97 @@ export default function InterviewInterface({ profileData, onExit }: InterviewInt
           </Button>
         </div>
 
-        {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto px-6 py-8 space-y-6">
-          {/* AI Insights Panel */}
-          {aiSummary && <AIInsightsPanel summary={aiSummary} timestamp={new Date()} />}
-          
-          {messages.map((message) => {
-            if (message.type === 'code' && message.role === 'candidate') {
-              return (
-                <CodeMessageBubble
-                  key={message.id}
-                  code={message.content}
-                  language={message.metadata?.language || 'python'}
-                  timestamp={message.timestamp}
-                  executionResult={{
-                    passed: true,
-                    testCasesPassed: 5,
-                    testCasesTotal: 5,
-                  }}
-                />
-              );
-            }
-            return (
-              <MessageBubble
-                key={message.id}
-                role={message.role}
-                type={message.type}
-                content={message.content}
-                timestamp={message.timestamp}
-              />
-            );
-          })}
-        </div>
-
-        {/* Input Area */}
-        {currentQuestion <= totalQuestions && !completedQuestions.includes(currentQuestion) && (
+        {/* Results View when complete */}
+        {isComplete ? (
           <>
-            {currentQ.type === 'voice' ? (
-              <VoiceRecorder 
-                onSubmit={handleVoiceSubmit} 
-                isDisabled={isSubmitting} 
-                questionText={currentQ.text}
-              />
-            ) : (
-              <CodeEditor onSubmit={handleCodeSubmit} isDisabled={isSubmitting} />
+            <div className="flex-1 overflow-y-auto px-6 py-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Score Box */}
+                <div className="bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-sm animate-fadeIn">
+                  <p className="text-xs font-semibold text-[#38A169]/80 uppercase tracking-wide mb-2">Overall Score</p>
+                  <p className="text-4xl font-bold text-[#2D3748] mb-2">{overallScore ?? '--'}/100</p>
+                  <p className="text-sm text-[#2D3748]/60 mb-4">
+                    Based on your answers to the 3 interview questions.
+                  </p>
+                  <p className="text-xs sm:text-sm text-[#2D3748]/60">
+                    Time: {Math.floor(elapsedTime / 60)}m {String(elapsedTime % 60).padStart(2, '0')}s
+                  </p>
+                </div>
+
+                {/* Improvements Box */}
+                <div className="bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-sm animate-fadeIn">
+                  <p className="text-xs font-semibold text-[#2D3748]/70 uppercase tracking-wide mb-2">What you can improve</p>
+                  {improvementTips.length > 0 ? (
+                    <ul className="list-disc pl-5 space-y-2 text-sm text-[#2D3748]/80">
+                      {improvementTips.map((tip, index) => (
+                        <li key={index}>{tip}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-[#2D3748]/60">No improvement tips available.</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="border-t border-[#E2E8F0] bg-white px-6 py-4">
+              <div className="flex items-center justify-end gap-4">
+                <Button size="lg" onClick={onExit}>
+                  Exit Interview
+                </Button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Messages Area */}
+            <div className="flex-1 overflow-y-auto px-6 py-8 space-y-6">
+              {/* AI Insights Panel */}
+              {aiSummary && <AIInsightsPanel summary={aiSummary} timestamp={new Date()} />}
+
+              {messages.map((message) => {
+                if (message.type === 'code' && message.role === 'candidate') {
+                  return (
+                    <CodeMessageBubble
+                      key={message.id}
+                      code={message.content}
+                      language={message.metadata?.language || 'python'}
+                      timestamp={message.timestamp}
+                      executionResult={{
+                        passed: true,
+                        testCasesPassed: 5,
+                        testCasesTotal: 5,
+                      }}
+                    />
+                  );
+                }
+                return (
+                  <MessageBubble
+                    key={message.id}
+                    role={message.role}
+                    type={message.type}
+                    content={message.content}
+                    timestamp={message.timestamp}
+                  />
+                );
+              })}
+            </div>
+
+            {/* Input Area */}
+            {currentQuestion <= totalQuestions && !completedQuestions.includes(currentQuestion) && (
+              <>
+                {currentQ.type === 'voice' ? (
+                  <VoiceRecorder
+                    onSubmit={handleVoiceSubmit}
+                    isDisabled={isSubmitting}
+                    questionText={currentQ.text}
+                  />
+                ) : (
+                  <CodeEditor onSubmit={handleCodeSubmit} isDisabled={isSubmitting} />
+                )}
+              </>
             )}
           </>
-        )}
-
-        {/* Interview Complete Actions */}
-        {currentQuestion > totalQuestions && (
-          <div className="border-t border-[#E2E8F0] bg-white px-6 py-4">
-            <div className="flex items-center justify-center gap-4">
-              <Button variant="outline" size="lg">
-                Review Answers
-              </Button>
-              <Button size="lg" onClick={onExit}>
-                Exit Interview
-              </Button>
-            </div>
-          </div>
         )}
       </div>
     </div>

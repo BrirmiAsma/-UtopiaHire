@@ -182,20 +182,20 @@ export default function ProfileDataCollector({ onComplete, onCancel }: ProfileDa
                   <Briefcase className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-[#2D3748]">Job Description</h2>
-                  <p className="text-sm text-[#2D3748]/70">Enter the job description for the position</p>
+                  <h2 className="text-2xl font-bold text-[#2D3748]">Job Name</h2>
+                  <p className="text-sm text-[#2D3748]/70">Enter the job name for the position</p>
                 </div>
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-[#2D3748] mb-2">
-                  Job Description <span className="text-red-500">*</span>
+                  Job Name <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   value={profileData.job}
                   onChange={(e) => setProfileData({ ...profileData, job: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2C7A7B]"
-                  placeholder="Enter the job description here..."
+                  placeholder="Enter the job name here..."
                   rows={10}
                 />
               </div>

@@ -276,7 +276,7 @@ ${data.languages}
               <FileText className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">CV Analyzer</h2>
+              <h2 className="text-lg font-bold text-white">CV Generator</h2>
               <p className="text-xs text-white/80">
                 {isComplete
                   ? 'Resume Generated'

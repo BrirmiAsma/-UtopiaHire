@@ -15,7 +15,7 @@ export default function CVAnalyzerPage() {
             </div>
             <div>
               <h1 className="text-3xl sm:text-4xl font-bold text-[#2D3748]">
-                CV Analyzer
+                CV Generator
               </h1>
               <p className="text-[#2D3748]/70">
                 Upload your CV and get AI-powered enhancement suggestions

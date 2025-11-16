@@ -1,7 +1,6 @@
 'use client';
 
 import { FileText, Download, X } from 'lucide-react';
-import { jsPDF } from 'jspdf';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 
@@ -61,7 +60,8 @@ export default function CVComparisonView({
     URL.revokeObjectURL(url);
   };
 
-  const handleDownloadPDF = (content: HighlightedSection[], filename: string) => {
+  const handleDownloadPDF = async (content: HighlightedSection[], filename: string) => {
+    const { jsPDF } = await import('jspdf');
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
